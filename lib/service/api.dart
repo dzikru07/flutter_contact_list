@@ -17,6 +17,7 @@ class ApiService {
 
   _setHeadersWithToken() => {
         'Content-type': 'application/json',
+        'application': 'x-www-form-urlencoded',
         'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9'
       };
 
@@ -28,10 +29,11 @@ class ApiService {
 
   Future postApiData(String path, var data) async {
     await getUrl();
-    var fullUrl = Uri.http(
+    var fullUrl = Uri.https(
       getUrl(),
       path,
     );
+    print(fullUrl);
     return await http.post(fullUrl, headers: _setHeaders(), body: data);
   }
 }

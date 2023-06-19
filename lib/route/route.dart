@@ -1,4 +1,5 @@
 // make route using getx
+import 'package:flutter_contact_list/pages/form_add/view/add_data.dart';
 import 'package:flutter_contact_list/pages/login/view/login_page.dart';
 import 'package:get/get.dart';
 
@@ -18,5 +19,6 @@ class AppRoute {
       name: '/login',
       page: () => const LoginPage(),
     ),
+    GetPage(name: '/add-data', page: () => FormAdd())
   ];
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contact_list/pages/login/controller/login_controller.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../style/color.dart';
 import '../../../style/text.dart';
@@ -14,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  LoginController loginController = Get.put(LoginController());
+
   String? _email;
   String? _password;
 
@@ -92,30 +96,40 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: height / 15,
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: width,
-                    child: Material(
-                      borderRadius: BorderRadius.circular(5),
-                      color: mainColor,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(5),
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            Get.offAllNamed('/home');
-                          }
-                        },
-                        highlightColor: Colors.red.withOpacity(0.4),
-                        splashColor: Colors.purple.withOpacity(0.5),
-                        child: Center(
-                            child: Text(
-                          "Login",
-                          style: loginButtonStyle,
-                        )),
-                      ),
-                    ),
-                  ),
+                  Obx(
+                    () => loginController.isLoading.value
+                        ? LoadingAnimationWidget.discreteCircle(
+                            color: mainColor,
+                            size: width / 12,
+                          )
+                        : SizedBox(
+                            height: 50,
+                            width: width,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(5),
+                              color: mainColor,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(5),
+                                onTap: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    loginController.username.value = _email!;
+                                    loginController.password.value = _password!;
+                                    // Get.offAllNamed('/home');
+                                    loginController.login();
+                                  }
+                                },
+                                highlightColor: Colors.red.withOpacity(0.4),
+                                splashColor: Colors.purple.withOpacity(0.5),
+                                child: Center(
+                                    child: Text(
+                                  "Login",
+                                  style: loginButtonStyle,
+                                )),
+                              ),
+                            ),
+                          ),
+                  )
                 ],
               ),
               const SizedBox()

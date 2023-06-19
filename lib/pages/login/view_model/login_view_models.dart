@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_contact_list/pages/login/model/login_model.dart';
@@ -11,10 +12,10 @@ class ServiceLoginPage {
   final ApiService _apiService = ApiService();
 
   postLoginUser(String user, String password) async {
+    var param = jsonEncode({"username": user, "password": password});
     try {
-      var param = jsonEncode({"username": user, "password": password});
       http.Response response = await _apiService
-          .postApiData("/apporder/api/login", param)
+          .postApiData("/api/login", param)
           .timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         return loginModelFromJson(response.body);
